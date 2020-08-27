@@ -3,6 +3,7 @@ exports.__esModule = true;
 var fabric_1 = require("fabric");
 var Rain = /** @class */ (function () {
     function Rain(canvas, boxWidth, cWidth) {
+        var _this = this;
         this.defaultValue = [];
         this.update = function (rains, boxSize, cWidth, canvas) {
             setInterval(function () {
@@ -12,19 +13,15 @@ var Rain = /** @class */ (function () {
                     }
                     else {
                         rain.top = Math.floor(Math.random() * (cWidth / boxSize)) * boxSize;
-                        rain.fill = '#' + (0x1000000 + (Math.random()) * 0xffffff).toString(16).substr(1, 6);
+                        rain.fill = _this.getRandomColor();
                     }
                 });
                 canvas.renderAll();
             }, 200);
         };
         this.getRandomColor = function () {
-            var letters = '0123456789ABCDEF';
-            var color = '#';
-            for (var i = 0; i < 6; i++) {
-                color += letters[Math.floor(Math.random() * 16)];
-            }
-            return color;
+            var r = function () { return Math.floor(Math.random() * 256); };
+            return "rgb(" + r() + "," + r() + "," + r() + ")";
         };
         var rain = {
             width: boxWidth,
