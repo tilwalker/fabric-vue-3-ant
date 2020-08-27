@@ -1,12 +1,16 @@
 import fabric from 'fabric';
 // import { ICanvas, IObjectElement } from '@/interface/Canvas.interface';
 // import { ObjectType } from '@/enum/Canvas.enum';
+import Snake from '@/lib/snake/Snake';
+import Rain from '@/lib/rain/Rain';
 
 const Fabric = fabric.fabric;
 
 export default class Canvas {
   boxSize = 30;
   canvas!: any;
+  snake!: any;
+  rain!: any;
 
   constructor(canvasElementId?: string) {
     if (canvasElementId) {
@@ -32,6 +36,9 @@ export default class Canvas {
     });
     this.canvas.add(groupBackground);
     this.canvas.renderAll();
+
+    // this.snake = new Snake(this.canvas, this.boxSize, this.boxSize * 20);
+    this.rain = new Rain(this.canvas, this.boxSize, this.boxSize * 20);
   }
 
   // returnFabricElement(elementData: IObjectElement) {
@@ -60,7 +67,7 @@ export default class Canvas {
     return rect
   }
 
-  drawBackground(boxSize: number, cWidth: number) {
+  drawBackground = (boxSize: number, cWidth: number) => {
     const elementArr = [];
     for (let i = 0; i < cWidth / boxSize; i++) {
       for (let j = 0; j < cWidth / boxSize; j++) {

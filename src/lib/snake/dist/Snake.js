@@ -1,9 +1,9 @@
-import fabric from 'fabric';
-
-export default class Snake {
-    defaultValue: any = {}
-
-    constructor(canvas: fabric.fabric.Canvas, boxWidth: number, cWidth: number) {
+"use strict";
+exports.__esModule = true;
+var fabric_1 = require("fabric");
+var Snake = /** @class */ (function () {
+    function Snake(canvas, boxWidth, cWidth) {
+        this.defaultValue = {};
         this.defaultValue = {
             snakeHead: {
                 width: boxWidth,
@@ -31,14 +31,15 @@ export default class Snake {
                     fill: '#fff'
                 }
             ]
-        }
-
-        const snakeHead = new fabric.fabric.Rect(this.defaultValue.snakeHead);
+        };
+        var snakeHead = new fabric_1["default"].fabric.Rect(this.defaultValue.snakeHead);
         canvas.add(snakeHead);
-        this.defaultValue.snakeBody.forEach((element: any) => {
-            const bodyElement = new fabric.fabric.Rect(element);
+        this.defaultValue.snakeBody.forEach(function (element) {
+            var bodyElement = new fabric_1["default"].fabric.Rect(element);
             canvas.add(bodyElement);
-        })
+        });
         canvas.renderAll();
     }
-}
+    return Snake;
+}());
+exports["default"] = Snake;
