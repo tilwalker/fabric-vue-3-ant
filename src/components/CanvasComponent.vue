@@ -1,20 +1,79 @@
 <template>
   <div class="canvas-parent">
+    <div>
+      <a-input-group size="large">
+        <a-row :gutter="[8, 8]" type="flex" justify="space-around" align="bottom">
+          <a-col :span="8">
+            <div class="title">Canvas Width</div>
+            <a-input :value="width" type="number" 
+              @input="$emit(
+                'update:width', 
+                $event.target.value
+              )"
+            />
+          </a-col>
+          <a-col :span="8">
+            <div class="title">Canvas Height</div>
+            <a-input :value="height" type="number"
+              @input="$emit(
+                'update:height', 
+                $event.target.value
+              )"
+            />
+          </a-col>
+          <a-col class="height-100" :span="8">
+            <a-button size="large" type="primary" @click="applyWidthHeight">
+              Apply
+            </a-button>
+          </a-col>
+        </a-row>
+      </a-input-group>
+    </div>
     <canvas id="c" ref="c" ></canvas>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { onMounted } from 'vue';
 import Canvas from '@/lib/canvas/Canvas';
 
-export default defineComponent ({
-  // setup() {
-  // },
-  mounted() {
-    new Canvas('c');
-  }
-})
+export default {
+  props: {
+    width: {
+      type: Number,
+      default: 10
+    },
+    height: {
+      type: Number,
+      default: 10
+    }
+  },
+  setup(props: any) {
+    let canvas!: Canvas;
+
+    const initCanvas = (width: number, height: number) => {
+      canvas.initCanvas(width, height);
+    }
+
+    onMounted(() => {
+      canvas = new Canvas('c');
+      initCanvas(Number(props.width), Number(props.height));
+      canvas.applyRainCanvas(props.width, props.height);
+    });
+
+    const applyWidthHeight = () => {
+      console.log(props)
+      initCanvas(Number(props.width), Number(props.height));
+      canvas.applyRainCanvas(props.width, props.height);
+    }
+
+    return {
+      canvas,
+      applyWidthHeight
+    }
+  },
+
+}
 </script>
 
 <style lang="css" scoped>

@@ -24,13 +24,7 @@
       </a-layout-sider>
       <a-layout>
         <a-layout-header style="background: #fff; padding: 0">
-          <!-- <menu-unfold-outlined
-            v-if="collapsed"
-            class="trigger"
-            @click="() => (collapsed = !collapsed)"
-          />
-          <menu-fold-outlined v-else class="trigger" @click="() => (collapsed = !collapsed)" /> -->
-            <h1 class="header">Hello World</h1>
+          <h1>Hello World</h1>
         </a-layout-header>
         <a-layout-content
           :style="{ margin: '24px 16px', padding: '24px', background: '#fff', minHeight: '280px' }"
@@ -49,6 +43,7 @@
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
+  height: 100vh;
 }
 
 #nav {
@@ -66,5 +61,8 @@
 
 .header {
   font-weight: bold;
+}
+#components-layout-demo-custom-trigger {
+  height: 100%;
 }
 </style>

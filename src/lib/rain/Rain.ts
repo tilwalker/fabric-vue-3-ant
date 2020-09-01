@@ -3,20 +3,21 @@ import fabric from 'fabric';
 export default class Rain {
     defaultValue = [];
 
-    constructor(canvas: fabric.fabric.Canvas, boxWidth: number, cWidth: number) {
+    constructor(canvas: fabric.fabric.Canvas, boxWidth: number, cWidth: number, cHeight: number) {
         const rain = {
             width: boxWidth,
             height: boxWidth,
             top: 0,
             left: 0,
-            fill: '#fff',
+            fill: this.getRandomColor(),
             selectable: false
         }
         const rains: any = [];
-        for (let i = 0; i < cWidth / boxWidth; i++) {
+        for (let i = 0; i < cWidth; i++) {
             if(i % 2 === 0) {
                 rain.left = boxWidth * i;
-                rain.top = Math.floor(Math.random() * 5) * boxWidth
+                rain.fill = this.getRandomColor(),
+                rain.top = Math.floor(Math.random() * cHeight) * boxWidth
                 const element = new fabric.fabric.Rect(rain);
                 rains.push(element);
                 canvas.add(element);
@@ -24,18 +25,14 @@ export default class Rain {
         }
         canvas.renderAll();
 
-        this.update(rains, boxWidth, cWidth, canvas);
+        this.update(rains, boxWidth, cWidth, cHeight, canvas);
     }
 
-    update = (rains: [], boxSize: number, cWidth: number, canvas: fabric.fabric.Canvas) => {
+    update = (rains: any, boxSize: number, cWidth: number, cHeight: number, canvas: fabric.fabric.Canvas) => {
         setInterval(() => {
-            rains.forEach((rain: any) => {
-                if (rain.top >= cWidth - boxSize) {
-                    rain.top = 0;
-                } else {
-                    rain.top = Math.floor(Math.random() * (cWidth / boxSize)) * boxSize;
-                    rain.fill = this.getRandomColor();
-                }
+            rains.forEach((rain: fabric.fabric.Rect) => {
+                rain.top = Math.floor(Math.random() * cHeight) * boxSize;
+                rain.set('fill', this.getRandomColor());
             })
             canvas.renderAll();
         }, 200)
