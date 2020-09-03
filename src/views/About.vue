@@ -1,18 +1,20 @@
 <template>
   <div class="about">
     <h1>This is an about page</h1>
+    <a-row>
       <a-input-group size="large">
         <a-row :gutter="8">
           <a-col :span="5">
-            <div class="title">Canvas Width</div>
-            <div class="value">{{cWidth}}</div>
+            <div class="title"><h2>Canvas Width</h2></div>
+            <div class="value"><h4>{{cWidth}}</h4></div>
           </a-col>
           <a-col :span="5">
-            <div class="title">Canvas Height</div>
-            <div class="value">{{cHeight}}</div>
+            <div class="title"><h2>Canvas Height</h2></div>
+            <div class="value"><h4>{{cHeight}}</h4></div>
           </a-col>
         </a-row>
       </a-input-group>
+    </a-row>
     <CanvasComponent v-model:width="cWidth" v-model:height="cHeight" />
   </div>
 </template>

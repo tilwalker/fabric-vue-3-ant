@@ -35,7 +35,7 @@
 
 <script lang="ts">
 import { onMounted } from 'vue';
-import Canvas from '@/lib/canvas/Canvas';
+import Rain from '@/lib/canvas/rain/Rain'
 
 export default {
   props: {
@@ -48,15 +48,15 @@ export default {
       default: 10
     }
   },
-  setup(props: any) {
-    let canvas!: Canvas;
+  setup(props: any ) {
+    let canvas!: Rain;
 
     const initCanvas = (width: number, height: number) => {
       canvas.initCanvas(width, height);
     }
 
     onMounted(() => {
-      canvas = new Canvas('c');
+      canvas = new Rain('c');
       initCanvas(Number(props.width), Number(props.height));
       canvas.applyRainCanvas(props.width, props.height);
     });

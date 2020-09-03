@@ -1,6 +1,6 @@
 import fabric from 'fabric';
 
-export default class Snake {
+class Snake {
     defaultValue: any = {}
 
     constructor(canvas: fabric.fabric.Canvas, boxWidth: number, cWidth: number) {

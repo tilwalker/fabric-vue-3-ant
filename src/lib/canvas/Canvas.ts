@@ -1,8 +1,4 @@
 import fabric from 'fabric';
-// import { ICanvas, IObjectElement } from '@/interface/Canvas.interface';
-// import { ObjectType } from '@/enum/Canvas.enum';
-import Snake from '@/lib/snake/Snake';
-import Rain from '@/lib/rain/Rain';
 
 const Fabric = fabric.fabric;
 
@@ -55,8 +51,9 @@ export default class Canvas {
     }
     return elementArr;
   }
-
-  applyRainCanvas = (cWidth: number, cHeight: number) => {
-    new Rain(this.canvas, this.boxSize, cWidth, cHeight);
+  
+  getRandomColor = () => {
+    const r = () => Math.floor(Math.random()*256);
+    return "rgb(" + r() + "," + r() + "," + r() + ")";
   }
 }
