@@ -18,3 +18,13 @@ export interface IObjectElement {
   angle?: number;
   style?: Object;
 }
+
+export interface ISnakeBox {
+  type: string;
+  width: number;
+  height: number;
+  top: number;
+  left: number;
+  selectable: boolean;
+  fill: string;
+}

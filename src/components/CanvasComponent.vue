@@ -27,6 +27,11 @@
             </a-button>
           </a-col>
         </a-row>
+        <a-row>
+          <a-button size="large" type="primary" @click="start">
+            Start
+          </a-button>
+        </a-row>
       </a-input-group>
     </div>
     <canvas id="c" ref="c" ></canvas>
@@ -35,40 +40,47 @@
 
 <script lang="ts">
 import { onMounted } from 'vue';
-import Rain from '@/lib/canvas/rain/Rain'
+// import Rain from '@/lib/canvas/rain/Rain';
+import Snake from '@/lib/canvas/snake/Snake';
 
 export default {
   props: {
     width: {
       type: Number,
-      default: 10
+      default: 15
     },
     height: {
       type: Number,
-      default: 10
+      default: 15
     }
   },
   setup(props: any ) {
-    let canvas!: Rain;
+    let canvas!: Snake;
 
     const initCanvas = (width: number, height: number) => {
       canvas.initCanvas(width, height);
     }
 
     onMounted(() => {
-      canvas = new Rain('c');
+      canvas = new Snake('c');
       initCanvas(Number(props.width), Number(props.height));
-      canvas.applyRainCanvas(props.width, props.height);
+      canvas.initSnake();
+      // canvas.start();
     });
 
     const applyWidthHeight = () => {
       console.log(props)
       initCanvas(Number(props.width), Number(props.height));
-      canvas.applyRainCanvas(props.width, props.height);
+      canvas.initSnake();
+    }
+
+    const start = () => {
+      canvas.start();
     }
 
     return {
       canvas,
+      start,
       applyWidthHeight
     }
   },
