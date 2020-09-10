@@ -2,6 +2,7 @@ import fabric from 'fabric';
 import Canvas from '../Canvas';
 import { ISnakeBox } from '@/interface/Canvas.interface';
 import UseKeydown from '@/lib/canvas/snake/Event';
+import { KeydownEvent } from '@/enum/Event.enum';
 
 export default class Snake extends Canvas {
     defaultValue: any = {};
@@ -12,7 +13,7 @@ export default class Snake extends Canvas {
 
     initSnake = () => {
         this.snake = [];
-        const snakeHead: ISnakeBox = {
+        this.defaultValue.snakeHead = {
             type: 'head',
             width: this.boxSize,
             height: this.boxSize,
@@ -22,7 +23,7 @@ export default class Snake extends Canvas {
             fill: '#cd3e0f'
         };
 
-        const snakeBody: ISnakeBox[] = [
+        this.defaultValue.snakeBody = [
             {
                 type: 'body',
                 width: this.boxSize,
@@ -43,10 +44,10 @@ export default class Snake extends Canvas {
             }
         ];
 
-        this.snake.push(snakeHead);
+        this.snake.push(this.defaultValue.snakeHead);
 
-        this.canvas.add(new fabric.fabric.Rect(snakeHead));
-        snakeBody.forEach((element: any) => {
+        this.canvas.add(new fabric.fabric.Rect(this.defaultValue.snakeHead));
+        this.defaultValue.snakeBody.forEach((element: any) => {
             this.snake.push(element);
         })
         this.snake.forEach((element: ISnakeBox) => {
@@ -60,13 +61,16 @@ export default class Snake extends Canvas {
         const action = setInterval(() => {
             this.update(this.keycodeEvent);
             UseKeydown(this.keycodeEvent);
+            this.keydownEvent();
             if (
-                this.snake[0].top === 0
-                || this.snake[0].top === (this.canvas.getHeight() - this.boxSize)
-                || this.snake[0].left === 0
-                || this.snake[0].left === (this.canvas.getWidth() - this.boxSize)
+                this.snake[0].top < -1
+                || this.snake[0].top > (this.canvas.getHeight() - this.boxSize + 1)
+                || this.snake[0].left < -1
+                || this.snake[0].left > (this.canvas.getWidth() - this.boxSize + 1)
             ) {
                 clearInterval(action);
+                this.resetSnake()
+                this.initSnake();
             }
         }, 500);
         setTimeout(() => {
@@ -101,11 +105,53 @@ export default class Snake extends Canvas {
             }
         }
         // this.initCanvas(this.canvas.getWidth(), this.canvas.getHeight());
-        this.canvas.remove(...this.canvas.getObjects().filter((element: any) => element.type === 'head' || element.type === 'body'));
+        this.resetSnake()
         this.snake.forEach((element: ISnakeBox) => {
             const defaultSnakeBox = new fabric.fabric.Rect(element);
             this.canvas.add(defaultSnakeBox);
         });
         this.canvas.renderAll();
+    }
+
+    resetSnake = () => {
+        this.canvas.remove(...this.canvas.getObjects().filter((element: any) => element.type === 'head' || element.type === 'body'));
+    }
+
+    keydownEvent = () => {
+        const onKeydown = (event: KeyboardEvent) => {
+          switch (event.keyCode) {
+            case KeydownEvent.TOP: {
+                if (this.keycodeEvent !== 'bottom') {
+                    this.keycodeEvent = 'top';
+                }
+                // this.update('top');
+              break;
+            }
+            case KeydownEvent.RIGHT: {
+                if (this.keycodeEvent !== 'left') {
+                    this.keycodeEvent = 'right';
+                }
+                // this.update('right');
+              break;
+            }
+            case KeydownEvent.BOTTOM: {
+                if (this.keycodeEvent !== 'top') {
+                    this.keycodeEvent = 'bottom';
+                }
+                // this.update('bottom');
+              break;
+            }
+            case KeydownEvent.LEFT: {
+                if (this.keycodeEvent !== 'right') {
+                    this.keycodeEvent = 'left';
+                }
+                // this.update('left');
+              break;
+            }
+          }
+          console.log(event.keyCode, 'keycode')
+        };
+      
+        window.addEventListener('keydown', onKeydown);
     }
 }
