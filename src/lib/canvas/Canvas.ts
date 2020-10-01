@@ -7,8 +7,10 @@ export default class Canvas {
   canvas!: fabric.fabric.Canvas;
   snake!: any;
   rain!: any;
+  canvasId!: string;
 
   constructor(canvasElementId: string) {
+    this.canvasId = canvasElementId;
     this.canvas = new Fabric.Canvas(canvasElementId);
   }
 

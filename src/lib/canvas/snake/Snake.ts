@@ -1,15 +1,19 @@
 import fabric from 'fabric';
 import Canvas from '../Canvas';
+import Food from './Food';
 import { ISnakeBox } from '@/interface/Canvas.interface';
 import UseKeydown from '@/lib/canvas/snake/Event';
 import { KeydownEvent } from '@/enum/Event.enum';
 
 export default class Snake extends Canvas {
+
     defaultValue: any = {};
 
     snake: ISnakeBox[] = [];
 
     keycodeEvent = 'right';
+
+    food: any = {};
 
     initSnake = () => {
         this.snake = [];
@@ -50,11 +54,25 @@ export default class Snake extends Canvas {
         this.defaultValue.snakeBody.forEach((element: any) => {
             this.snake.push(element);
         })
+        this.food = new Food(this.canvasId).initFood(this.canvas.getWidth(), this.canvas.getHeight());
+        this.canvas.add(new fabric.fabric.Rect(this.food));
+
         this.snake.forEach((element: ISnakeBox) => {
             const defaultSnakeBox = new fabric.fabric.Rect(element);
             this.canvas.add(defaultSnakeBox);
         });
         this.canvas.renderAll();
+    }
+
+    checkEatItSelf = (): boolean => {
+        let isEat = false;
+        for (let i = 1; i < this.snake.length; i++) {
+            if (this.snake[0].top === this.snake[i].top && this.snake[0].left === this.snake[i].left) {
+                isEat = true;
+                break;
+            }
+        }
+        return isEat;
     }
 
     start = () => {
@@ -67,9 +85,11 @@ export default class Snake extends Canvas {
                 || this.snake[0].top > (this.canvas.getHeight() - this.boxSize + 1)
                 || this.snake[0].left < -1
                 || this.snake[0].left > (this.canvas.getWidth() - this.boxSize + 1)
+                || this.checkEatItSelf()
             ) {
                 clearInterval(action);
-                this.resetSnake()
+                this.resetSnake();
+                this.resetFood();
                 this.initSnake();
             }
         }, 500);
@@ -105,7 +125,8 @@ export default class Snake extends Canvas {
             }
         }
         // this.initCanvas(this.canvas.getWidth(), this.canvas.getHeight());
-        this.resetSnake()
+        this.resetSnake();
+        this.eatFoodEvent(this.food);
         this.snake.forEach((element: ISnakeBox) => {
             const defaultSnakeBox = new fabric.fabric.Rect(element);
             this.canvas.add(defaultSnakeBox);
@@ -149,9 +170,34 @@ export default class Snake extends Canvas {
               break;
             }
           }
-          console.log(event.keyCode, 'keycode')
         };
       
         window.addEventListener('keydown', onKeydown);
+    }
+
+    eatFoodEvent = (food: any): void => {
+        if (this.snake[0].top === food.top && this.snake[0].left === food.left) {
+            this.resetFood();
+            this.updateSnake();
+            this.food = new Food(this.canvasId).initFood(this.canvas.getWidth(), this.canvas.getHeight());
+            this.canvas.add(new fabric.fabric.Rect(this.food));
+        }
+    }
+
+    updateSnake = () => {
+        const snakeBodyUpdate: ISnakeBox = {
+            type: 'body',
+            width: this.boxSize,
+            height: this.boxSize,
+            top: this.snake[this.snake.length - 1].top,
+            left: this.snake[this.snake.length - 1].left,
+            selectable: false,
+            fill: '#fff'
+        };
+        this.snake.push(snakeBodyUpdate);
+    }
+
+    resetFood = (): void => {
+        this.canvas.remove(...this.canvas.getObjects().filter((element: any) => element.type === 'food'));
     }
 }
